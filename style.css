@@ -119,3 +119,6 @@ footer {
     justify-content: center;
     color: white;
 }
+html{
+    scroll-behavior: smooth;
+}
