@@ -69,9 +69,28 @@ function renderTodayReminders() {
         item.style.transition = 'all 0.3s ease'
 
         item.innerHTML = `
-            <div class="time">${task.time}</div>
-            <div class="title">${task.title}</div>
+            <div>
+                <div class="time">${task.time}</div>
+                <div class="title">${task.title}</div>
+            </div>
+            <button class="delete-task-btn">❌</button>
         `
+        
+        const deleteBtn = item.querySelector('.delete-task-btn')
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', function(e) {
+                e.stopPropagation()
+                
+                item.style.opacity = '0'
+                item.style.transform = 'translateX(10px)'
+                
+                setTimeout(function() {
+                    reminders = reminders.filter(r => r.id !== task.id)
+                    localStorage.setItem('savedReminders', JSON.stringify(reminders))
+                    renderTodayReminders()
+                }, 300)
+            })
+        }
         
         todayList.appendChild(item)
         

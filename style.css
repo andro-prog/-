@@ -117,10 +117,11 @@ body {
 }
 
 .reminder-item {
-    padding-left: 12px;
+    position: relative;
     display: flex;
-    flex-direction: column;
-    gap: 2px;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 30px;
 }
 
 .reminder-item.plan { border-left: 3px solid #4a6fa5; }
@@ -137,6 +138,35 @@ body {
     font-size: 0.85rem;
     color: #495057;
     font-weight: 600;
+}
+
+.delete-task-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #adb5bd;
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    opacity: 0;
+}
+
+.reminder-item:hover .delete-task-btn {
+    opacity: 1;
+}
+
+.delete-task-btn:hover {
+    color: #dc3545;
+    background-color: #f8f9fa;
+}
+
+body.dark-mode .delete-task-btn:hover {
+    background-color: #252a3d;
 }
 
 .calendar-section {
