@@ -8,7 +8,6 @@ const descTextarea = document.getElementById('task-desc')
 const charCountSpan = document.getElementById('char-count')
 const tagButtons = document.querySelectorAll('.tag-btn')
 
-// Новые элементы управления формой и списком сегодня
 const taskTitleInput = document.getElementById('task-title')
 const taskTimeInput = document.getElementById('task-time')
 const taskReminderSelect = document.getElementById('task-reminder-time')
@@ -16,7 +15,6 @@ const saveTaskBtn = document.getElementById('save-task-btn')
 const todayList = document.getElementById('today-list')
 const todayCountSpan = document.getElementById('today-count')
 
-// Элементы плашки даты справа
 const badgeDateNum = document.getElementById('badge-date-num')
 const badgeDayName = document.getElementById('badge-day-name')
 const badgeFullDate = document.getElementById('badge-full-date')
@@ -33,17 +31,14 @@ const monthsGenitive = [
 
 const weekdays = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
 
-// База данных напоминаний (берём из LocalStorage или создаём пустой массив)
 let reminders = JSON.parse(localStorage.getItem('savedReminders')) || []
 
 const currentDate = new Date()
 let currentMonth = currentDate.getMonth() 
 let currentYear = currentDate.getFullYear() 
 
-// По умолчанию выбран сегодняшний день
 let selectedDay = currentDate.getDate()
 
-// Функция обновления плашки даты справа
 function updateDateBadge(day, month, year) {
     const targetDate = new Date(year, month, day)
     
@@ -52,13 +47,11 @@ function updateDateBadge(day, month, year) {
     if (badgeFullDate) badgeFullDate.innerText = day + ' ' + monthsGenitive[month] + ' ' + year
 }
 
-// Функция рендеринга сегодняшних напоминаний в сайдбар
 function renderTodayReminders() {
     if (!todayList) return
 
     todayList.innerHTML = ''
     
-    // Фильтруем задачи, которые подходят под выбранную дату
     const activeTasks = reminders.filter(function(item) {
         return item.day === selectedDay && item.month === currentMonth && item.year === currentYear
     })
@@ -71,19 +64,17 @@ function renderTodayReminders() {
         const item = document.createElement('div')
         item.classList.add('reminder-item', task.category)
         
-        // Эффект плавного появления через CSS
         item.style.opacity = '0'
         item.style.transform = 'translateX(-10px)'
         item.style.transition = 'all 0.3s ease'
 
         item.innerHTML = `
-            <div class="time">' + task.time + '</div>
-            <div class="title">' + task.title + '</div>
+            <div class="time">${task.time}</div>
+            <div class="title">${task.title}</div>
         `
         
         todayList.appendChild(item)
         
-        // Триггерим анимку в следующем кадре
         setTimeout(function() {
             item.style.opacity = '1'
             item.style.transform = 'translateX(0)'
@@ -107,7 +98,6 @@ function renderCalendar() {
         cell.classList.add('day-cell')
         cell.innerText = i
 
-        // Если этот день выбран — подсвечиваем
         if (i === selectedDay) {
             cell.classList.add('selected')
         }
@@ -121,7 +111,6 @@ function renderCalendar() {
             cell.classList.add('selected')
             selectedDay = i
             
-            // Обновляем плашку и список задач под новый кликнутый день!
             updateDateBadge(selectedDay, currentMonth, currentYear)
             renderTodayReminders()
         })
@@ -132,21 +121,18 @@ function renderCalendar() {
     }
 }
 
-// Кнопка СОХРАНИТЬ напоминание
 if (saveTaskBtn) {
     saveTaskBtn.addEventListener('click', function() {
         if (!taskTitleInput.value.trim()) return alert('Введите название!')
 
-        // Ищем, какой тег категории сейчас активен
         const activeTag = document.querySelector('.tag-btn.active')
         let categoryClass = 'personal'
         if (activeTag) {
-            if (activeTag.classList.contains('work')) categoryClass = 'internet' // оранжевая
-            if (activeTag.classList.contains('important')) categoryClass = 'sport' // зелёная
-            if (activeTag.classList.contains('personal')) categoryClass = 'plan' // синяя
+            if (activeTag.classList.contains('work')) categoryClass = 'internet'
+            if (activeTag.classList.contains('important')) categoryClass = 'sport'
+            if (activeTag.classList.contains('personal')) categoryClass = 'plan'
         }
 
-        // Собираем объект задачи
         const newReminder = {
             id: Date.now(),
             title: taskTitleInput.value,
@@ -159,22 +145,18 @@ if (saveTaskBtn) {
             year: currentYear
         }
 
-        // Закидываем в массив и LocalStorage
         reminders.push(newReminder)
         localStorage.setItem('savedReminders', JSON.stringify(reminders))
 
-        // Очищаем форму
         taskTitleInput.value = ''
         if (taskTimeInput) taskTimeInput.value = '19:00'
         if (descTextarea) descTextarea.value = ''
         if (charCountSpan) charCountSpan.innerText = '0'
 
-        // Мгновенно перерисовываем список «СЕГОДНЯ» с новой задачей!
         renderTodayReminders()
     })
 }
 
-// Переключение активного тега в форме
 tagButtons.forEach(function(btn) {
     btn.addEventListener('click', function() {
         tagButtons.forEach(b => b.classList.remove('active'))
@@ -182,7 +164,6 @@ tagButtons.forEach(function(btn) {
     })
 })
 
-// Счётчик букв
 if (descTextarea && charCountSpan) {
     descTextarea.addEventListener('input', function() {
         let currentLength = descTextarea.value.length
@@ -194,7 +175,6 @@ if (descTextarea && charCountSpan) {
     })
 }
 
-// Стрелочки месяцев
 if (prevBtn) {
     prevBtn.addEventListener('click', function() {
         currentMonth--
@@ -217,7 +197,6 @@ if (nextBtn) {
     })
 }
 
-// Тёмная тема
 if (themeToggle) {
     themeToggle.addEventListener('click', function() {
         document.body.classList.toggle('dark-mode')
@@ -225,7 +204,6 @@ if (themeToggle) {
     })
 }
 
-// Запуск приложения
 updateDateBadge(selectedDay, currentMonth, currentYear)
 renderCalendar()
 renderTodayReminders()
