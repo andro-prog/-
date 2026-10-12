@@ -528,3 +528,25 @@ body.dark-mode .setting-select {
     border-color: #25293a;
     color: #ffffff;
 }
+
+@media (max-width: 780px){
+    .app-container {
+        grid-template-columns:  1fr;
+        height: auto;
+        overflow-y: auto ;
+    }
+
+    .sidebar-panel{
+        display: none;
+    }
+
+    .calendar-section{
+        padding: 15px;
+    }
+
+    .day-cell {
+        min-height: 60px;
+        padding: 5px;
+        font-size: 0.85rem;
+    }
+}
